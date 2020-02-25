@@ -26,4 +26,3 @@ elif ton == "n":
 
     print("")
     print("Press enter to exit")
-    raw_input()
