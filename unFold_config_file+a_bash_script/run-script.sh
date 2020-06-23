@@ -9,6 +9,7 @@ mv -fv $Bname/*ini $Bname/Transparent/
 cp -rv $Bname ~/Documents/Rainmeter/Skins/unFold/
 cp -rv $Bname More-Icons-unFold-Rainmeter/
 rm -dirf $Bname
-mv -fv More-Icons-unFold-Rainmeter/$Bname/*png More-Icons-unFold-Rainmeter/Buttons/Transparent/
-cd ~/Documents/Rainmeter/Skins/unFold/$Bname
-mv -fv *png ~/Documents/Rainmeter/Skins/unFold/@Resources/Buttons/Transparent
+cd More-Icons-unFold-Rainmeter/
+mv -fv ./$Bname/*png ./Buttons/Transparent
+cd ~/Documents/Rainmeter/Skins/unFold/
+mv -fv ./$Bname/*png ./@Resources/Buttons/Transparent

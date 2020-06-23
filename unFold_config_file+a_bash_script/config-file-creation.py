@@ -4,11 +4,11 @@ def left_button(app_name,version,path,path2,desc):
     side="Left"
     file=open(file_name,'w')
     file.write('[Rainmeter]\nUpdate=1000\nBackgroundMode=2\nSolidColor=0,0,0,1\n\n')
-    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion= {}\nLicense=GNU General Public License v2.0\n'.format(version))
+    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion={}\nLicense=GNU General Public License v2.0\n'.format(version))
     if desc != True:
-            file.write('Information=The right side button for {}. {}\n\n'.format(app_name,desc))
+            file.write('Information=The left side button for {}. {}\n\n'.format(app_name,desc))
     elif desc == True:
-        file.write('Information=The right side button for {}\n\n'.format(app_name))
+        file.write('Information=The left side button for {}\n\n'.format(app_name))
     file.write('[Variables]\nOffset=-150\nU=[!UpdateMeasureGroup Sliders][!UpdateMeterGroup Items][!Redraw]\n\n')
     file.write('[{}]\nMeter=Image\nGroup=Items\nImageName=#@#Buttons\Transparent\{}\n;ImageTint is if you want to change the color of the button. RGB color codes only. example: 255,255,255\nImageTint=\nH=50\nX=#Offset#\nDynamicVariables=1\nMouseOverAction=[!CommandMeasure MeasureSlider "Stop 1"][!CommandMeasure MeasureSlider "Execute 2"]\nMouseLeaveAction=[!CommandMeasure MeasureSlider "Stop 2"][!CommandMeasure MeasureSlider "Execute 1"]\nLeftMouseDownAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "150"][!Update]\nLeftMouseUpAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "255"][!Update]["{}"]\n'.format(app_name,image_name,path))
     if path2 == True:
@@ -24,7 +24,7 @@ def right_button(app_name,version,path,path2,desc):
     side="Right"
     file=open(file_name,'w')
     file.write('[Rainmeter]\nUpdate=1000\nDynamicWindowSize=1\nAccurateText=1\nSkinWidth=180\nSkinHeight=50\nBackgroundMode=2\nSolidColor=0,0,0,1\n\n')
-    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion= {}\nLicense=GNU General Public License v2.0\n'.format(version))
+    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion={}\nLicense=GNU General Public License v2.0\n'.format(version))
     if desc != True:
         file.write("Information=The right side button for {}. {}\n\n".format(app_name,desc))
     elif desc == True:
