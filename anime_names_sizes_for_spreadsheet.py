@@ -1,8 +1,10 @@
 '''
+HOW TO USE THIS SCRIPT
+-------------------------
 ok. Before you use this or even go through the code let me tell you somedirectory. I am still new to programminng e.e
 Aight now thats out of the way.
-Copy the script below into a notepad file or somedirectory and replace PATHHERE with the location where you want to get the size of the folders and such. (With the quotation marks)
-After that open powershell and copy the script with the change path into the text area and press enter.
+
+Open powershell. cd into the directory where the anime folders are in. Copy the code in the lines from 7-12 into the powershell text area and and press Enter.
 (script lines i took from http://woshub.com/powershell-get-folder-sizes/ )
 
 $location = Get-Location
@@ -12,9 +14,10 @@ gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.l
 $_.fullname, '{0:N0} MB' -f ($len / 1Mb)
 }
 
-after the dirs and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
+after the directories and Sizes show up select all of it with your mouse (drag from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
 Copy them. Run this python script and paste them in the input area. For the last one press enter and then type 'q' and then enter.
 You should have files in the directory where you ran this python script in. Now go use them for spreadsheet columns :^)
+what i do is open each of the text file in a really small resolution and the spreadsheet window. Select all the text in the file, copy and paste the text under the respective column in the spreadsheet table.
 '''
 import string
 animes=[]
