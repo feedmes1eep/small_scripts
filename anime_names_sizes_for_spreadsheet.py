@@ -1,9 +1,15 @@
 '''
-ok. Before you use this or even go through the code let me tell you somedirectory. I am still new to programminng e.e
-Aight now thats out of the way.
-Copy the script below into a notepad file or somedirectory and replace PATHHERE with the location where you want to get the size of the folders and such. (With the quotation marks)
-After that open powershell and copy the script with the change path into the text area and press enter.
-(script lines i took from http://woshub.com/powershell-get-folder-sizes/ )
+ok. Before you use this or even go through the code let me tell you something. I am still new to programminng e.e
+Aight now thats out of the way, let us start using the script. Here are the steps:
+
+=================================================================================================================
+
+1. Open Powershell
+2. use the 'cd' or 'Set-Location' command to go into the directory that has all the anime folders. eg: Set-Location H:\pathto\directorythat\'has all the anime folders'\
+3. Copy the lines from 14 to 19
+4. Paste them in the powershell window you opened and press enter
+
+---------------------------- lines to get the anime directories in the working-directory and their size --------------------------------
 
 $location = Get-Location
 gci -force $location -ErrorAction SilentlyContinue | ? { $_ -is [io.directoryinfo] } | % {
@@ -12,9 +18,19 @@ gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.l
 $_.fullname, '{0:N0} MB' -f ($len / 1Mb)
 }
 
-after the dirs and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
-Copy them. Run this python script and paste them in the input area. For the last one press enter and then type 'q' and then enter.
-You should have files in the directory where you ran this python script in. Now go use them for spreadsheet columns :^)
+------------------------------ script lines i took from http://woshub.com/powershell-get-folder-sizes/ -----------------------------------
+
+5. After the directories and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
+6. Copy them. 
+7. Run this python script and paste them into input area. 
+8. For the last one press enter or use the above script lines to get another directories anime folder sizes.
+9. After you're done copying the directories and sizes, Type 'q' and then press enter.
+10. Lastly, You should have text files, fullnamed anime and sizes, in the directory where you ran this python script in. 
+Open them and they shud have the fullnames and sizes of the anime's or whatever you directories in the order you pasted them.
+
+====================================================================================================================
+Now go use them for spreadsheet columns :^)
+i know that you can create csv's with python and use them for database usage. I'm just taking my time in learning these things and also i am a slow learner when theres no1 to really teach me kek.
 '''
 import string
 animes=[]
@@ -23,7 +39,7 @@ directories=[]
 end=0
 
 while end == 0: 
-    end=input(r":=")
+    end=input(r"Input area:: ")
     if end == "q":
         break
     else:
@@ -67,8 +83,9 @@ for size in sizes:
 
 with open('anime.txt','w') as f:
     for anime in animes:
+        anistring_position = anime.count('\\')
         anime = anime.split('\\')
-        f.write(anime[3])
+        f.write(anime[anistring_position])
         f.write('\n')
 
 with open('size.txt','w') as f:
