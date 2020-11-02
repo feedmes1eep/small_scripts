@@ -6,7 +6,7 @@ Was trying to finish level 13 while reading the guide, but kept getting confused
 
 #### Prerequisite
 + [AHK](https://www.autohotkey.com/)
-
++ [The Script files](https://lithi.io/file/SG_VI_Macros)
 #### How to use
 1. Open the file for the specific level.
 2. Go back into the game's window. 
