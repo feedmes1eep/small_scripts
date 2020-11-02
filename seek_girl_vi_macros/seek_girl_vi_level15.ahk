@@ -555,3 +555,5 @@ Send, {Left Down} {Left Up}
 Sleep, 100
 Send, {Down Down} {Down Up}
 Sleep, 100
+Send, K
+Return

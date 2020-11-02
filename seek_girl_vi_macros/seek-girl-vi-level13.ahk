@@ -181,3 +181,4 @@ Send, {Up Down} {Up Up}
 Sleep, 100
 Send, {Right Down} {Right Up}
 Sleep, 100
+Return
