@@ -1,4 +1,4 @@
-!S::
+^!3::
 Send, {Up Down} {Up Up}
 Sleep, 100
 Send, {Left Down} {Left Up}
