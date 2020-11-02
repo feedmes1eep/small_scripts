@@ -181,5 +181,3 @@ Send, {Up Down} {Up Up}
 Sleep, 100
 Send, {Right Down} {Right Up}
 Sleep, 100
-
-;; 3R L UP 3R L UP R UP R 
