@@ -13,8 +13,9 @@ Aight now thats out of the way, let us start using the script. Here are the step
 
 $location = Get-Location
 gci -force $location -ErrorAction SilentlyContinue | ? { $_ -is [io.directoryinfo] } | % {
-@ -12,9 +18,19 @@ gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.l
-$_.fullname, '{0:N0} MB' -f ($len / 1Mb)
+$len = 0
+gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.length }
+$_.fullname, '{0:N0} GB' -f ($len / 1Mb)
 }
 
 after the dirs and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
