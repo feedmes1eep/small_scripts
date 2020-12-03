@@ -15,8 +15,8 @@ $location = Get-Location
 gci -force $location -ErrorAction SilentlyContinue | ? { $_ -is [io.directoryinfo] } | % {
 $len = 0
 gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.length }
-$_.fullname, '{0:N0} GB' -f ($len / 1Mb)
-}
+$_.fullname, '{0:N0} MB' -f ($len / 1Mb)
+} > output.txt
 
 after the dirs and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
 Copy them. Run this python script and paste them in the input area. For the last one press enter and then type 'q' and then enter.
@@ -26,16 +26,16 @@ You should have files in the directory where you ran this python script in. Now 
 5. After the directories and Sizes show up select all of it with your mouse (drop from the beginning to the end, if you know a better way to select the text in a shell you can do that. and pfft hmu and lemme know that trick too ;)).
 6. Copy them. 
 7. Run this python script and paste them into input area. 
-8. For the last one press enter or use the above script lines to get another directories anime folder sizes.
+8. For the last one press enter 
 9. After you're done copying the directories and sizes, Type 'q' and then press enter.
-10. Lastly, You should have text files, fullnamed anime and sizes, in the directory where you ran this python script in. 
-Open them and they shud have the fullnames and sizes of the anime's or whatever you directories in the order you pasted them.
+10. Lastly, You should have a csv file ready for you in whichever directory that you ran the script in
+You can open it using Microsoft Excel or import it to a google spreadsheet. Have fun :)
 
 ====================================================================================================================
 Now go use them for spreadsheet columns :^)
 i know that you can create csv's with python and use them for database usage. I'm just taking my time in learning these things and also i am a slow learner when theres no1 to really teach me kek.
 '''
-import string
+import string,csv
 animes=[]
 sizes=[]
 directories=[]
@@ -84,17 +84,38 @@ for size in sizes:
         temp_size = ''.join(temp_size)
         sizes.insert(i,temp_size)
 
-with open('anime.txt','w') as f:
-    for anime in animes:
-        anime = anime.split('\\')
-        f.write(anime[3])
-        f.write('\n')
+# with open('anime.txt','w') as f:
+#     for anime in animes:
+#         anime = anime.split('\\')
+#         f.write(anime[3])
+#         f.write('\n')
 
-with open('size.txt','w') as f:
-    for size in sizes:
-        if size.find('.') > -1:
-            f.write(size+' GB')
-            f.write('\n')
+# with open('size.txt','w') as f:
+#     for size in sizes:
+#         if size.find('.') > -1:
+#             f.write(size+' GB')
+#             f.write('\n')
+#         else:
+#             f.write(size+' MB')
+#             f.write('\n')
+
+with open('anime_folderandsizes.csv','w',newline='') as file:
+    header = ['Anime','Size']
+    writer = csv.DictWriter(file,fieldnames=header)
+
+    writer.writeheader()
+    for anime in animes:
+        i = animes.index(anime)
+        anime = anime.split('\\')
+
+        if sizes[i].find('.') > -1:
+            size = sizes[i] + ' GB'
         else:
-            f.write(size+' MB')
-            f.write('\n')
+            size = sizes[i] + ' MB'
+            
+        anime_size = {
+            'Anime': anime[3],
+            'Size': size
+        }
+
+        writer.writerow(anime_size)

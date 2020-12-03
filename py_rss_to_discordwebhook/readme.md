@@ -1,0 +1,1 @@
+# Scripts that i have made for different website rss feeds, i shall explain more after i upload them in here for now its in testing or creating more atm.
