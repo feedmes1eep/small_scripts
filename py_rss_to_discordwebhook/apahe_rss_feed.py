@@ -1,0 +1,63 @@
+import csv,feedparser,re,time as t,datetime as dt
+from discord_webhook import DiscordWebhook,DiscordEmbed
+
+details_list = []
+entry_list = []
+loop = 0
+
+while True:
+    loop += 1
+    with open ('anime_list.csv','r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            details_list.append(row)
+
+    feed = feedparser.parse('https://animepahe.com/feed/')
+
+    for entry in feed['entries']:
+        if entry['title'] in entry_list:
+            break
+        else:
+            title = entry['title'].split(' - ')[0]
+            if re.search(r'de":\d+',entry['title'].split(' - ')[1]):
+                details = entry['title'].split(' - ')[1]
+            else:
+                details = entry['title'].split(' - ')[2]
+                title = title + ' - ' + entry['title'].split(' - ')[1]
+            
+            episode = re.search(r'de":\d+',details).group()
+            episode = re.search(r'\d+',episode).group()
+            link = re.search(r'anime_id":\d+',details).group()
+            link = 'https://pahe.win/a/'+re.search(r'\d+',link).group()
+
+            for anime_detail in details_list:
+                if re.search('{}'.format(anime_detail['title']),title):
+                    if int(episode) > int(anime_detail['episode']):
+                        i = details_list.index(anime_detail)
+                        entry_list.append(entry['title'])
+
+                        anime_detail = {
+                            'title': title,
+                            'episode': episode,
+                            'link': link + '/' + episode
+                        }
+                        details_list[i].update({'episode': episode,'link': anime_detail['link']})
+                        
+                        webhook = DiscordWebhook(' =======  Your Webhook Link Here ======= ')
+                        embed = DiscordEmbed(title='{} - Episode {}'.format(anime_detail['title'],anime_detail['episode']),url=anime_detail['link'],color=6430145)
+                        embed.set_timestamp()
+                        webhook.add_embed(embed)
+                        webhook.execute()
+
+                        print('New: {} - Episode {} :: {}'.format(anime_detail['title'],anime_detail['episode'],dt.datetime.now()))
+    
+    with open('anime_list.csv','w',newline='') as csvfile:
+        headers = ['title','episode','link']
+        writer = csv.DictWriter(csvfile,fieldnames=headers)
+        writer.writeheader()
+        for detail in details_list:
+            writer.writerow(detail)
+
+    details_list.clear()
+    print(loop,' :: ',dt.datetime.now().strftime('%H:%M:%S'))
+    t.sleep(300)
