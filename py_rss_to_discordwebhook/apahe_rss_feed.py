@@ -1,8 +1,9 @@
-import csv,feedparser,re,time as t,datetime as dt
+import csv,feedparser,re,time as t,datetime as dt,random
 from discord_webhook import DiscordWebhook,DiscordEmbed
 
 details_list = []
 entry_list = []
+colors = [16711680, 0, 16777215, 16776960, 255, 65535, 12632256, 8421504, 65280, 16766720, 4915330, 8388736, 15631086, 16761035, 16119260, 10824234]
 loop = 0
 
 while True:
@@ -44,7 +45,7 @@ while True:
                         details_list[i].update({'episode': episode,'link': anime_detail['link']})
                         
                         webhook = DiscordWebhook(' =======  Your Webhook Link Here ======= ')
-                        embed = DiscordEmbed(title='{} - Episode {}'.format(anime_detail['title'],anime_detail['episode']),url=anime_detail['link'],color=6430145)
+                        embed = DiscordEmbed(title='{} - Episode {}'.format(anime_detail['title'],anime_detail['episode']),url=anime_detail['link'],color=random.choices(colors))
                         embed.set_timestamp()
                         webhook.add_embed(embed)
                         webhook.execute()
