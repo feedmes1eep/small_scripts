@@ -18,6 +18,30 @@ while True:
     for entry in feed['entries']:
         if entry['title'] in entry_list:
             break
+        elif re.search('{',entry['title']) == None:
+            title = entry['title']
+            for anime_detail in details_list:
+                if re.search('{}'.format(anime_detail['title']),title):
+                    i = details_list.index(anime_detail)
+                    entry_list.append(entry['title'])
+                    
+                    webhook = DiscordWebhook('https://discord.com/api/webhooks/746479984289513674/VRFRcfSu4P7wVNeaZ13GM300ZEcjlbs7mOZu5dEqeFoSGRXjTF3E8N7Pq8Gy6PPrYyR_')
+                    embed = DiscordEmbed(title='A whole series update of: {}'.format(title),color=random.choice(colors))
+                    embed.set_timestamp()
+                    webhook.add_embed(embed)
+                    webhook.execute()
+
+                    """
+                        dt.datetime.now() gets the time in my time zone (UTC+5).
+                    """
+                    print('Series_Update: {}:: {}'.format(title,dt.datetime.now()))
+                    
+                    """
+                        logs each posted webhook in a log file for later use? idk. Just wanted to try shit
+                    """
+                    with open('apahe_rss_script_logs.txt','a') as file:
+                        file.write('{} :: loop:{} : Series Update: {} \n'.format(dt.datetime.now(),loop,anime_detail['title']))     
+
         else:
             title = entry['title'].split(' - ')[0]
             if re.search(r'de":\d+',entry['title'].split(' - ')[1]):
