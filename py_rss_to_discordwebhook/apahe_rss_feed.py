@@ -28,21 +28,12 @@ while True:
                     entry_list.append(entry['title'])
                     
                     webhook = DiscordWebhook(' =======  Your Webhook Link Here ======= ')
-                    embed = DiscordEmbed(title='A whole series update of: {}'.format(title),color=random.choice(colors))
+                    embed = DiscordEmbed(title='Series Update: {}'.format(title),color=random.choice(colors))
                     embed.set_timestamp()
                     webhook.add_embed(embed)
                     webhook.execute()
 
-                    """
-                        dt.datetime.now() gets the time in my time zone (UTC+5).
-                    """
-                    print('Series_Update: {}:: {}'.format(title,dt.datetime.now()))
-                    
-                    """
-                        logs each posted webhook in a log file for later use? idk. Just wanted to try shit
-                    """
-                    with open('apahe_rss_script_logs.txt','a') as file:
-                        file.write('{} :: loop:{} : Series Update: {} \n'.format(dt.datetime.now(),loop,anime_detail['title']))     
+                    print('Series_Update: {}:: {}'.format(title,dt.datetime.now())) 
 
         else:
             title = entry['title'].split(' - ')[0]
