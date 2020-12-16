@@ -9,7 +9,7 @@
 
 ### What you need to do.
 I'll assume that you know basics of cli and know how to play around with discord.
- + Clone or download the files seperately. ([rar file](https://lithi.io/file/rss-to-webhook))
+ + Clone or download the files seperately. ([rar file](https://lithi.io/file/rss_to_webhook))
  + Open the directory in cli.
  + pip install -r requirements.txt (to get the required packages to run the script)
  + Get a webhook url for the chat channel of your choice and copy it into the script.
