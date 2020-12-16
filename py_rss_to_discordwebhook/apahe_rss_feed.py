@@ -13,7 +13,11 @@ while True:
         for row in reader:
             details_list.append(row)
 
-    feed = feedparser.parse('https://animepahe.com/feed/')
+    try:
+        feed = feedparser.parse('https://animepahe.com/feed/')
+    except:
+        loop -= 1
+        break
 
     for entry in feed['entries']:
         if entry['title'] in entry_list:
