@@ -5,6 +5,7 @@ details_list = []
 entry_list = []
 colors = [16711680, 16777215, 16776960, 255, 65535, 12632256, 8421504, 65280, 16766720, 4915330, 8388736, 15631086, 16761035, 16119260, 10824234]
 loop = 0
+webhook_link = ' =======  Your Webhook Link Here ======= '
 
 while True:
     loop += 1
@@ -31,7 +32,7 @@ while True:
                     i = details_list.index(anime_detail)
                     entry_list.append(entry['title'])
                     
-                    webhook = DiscordWebhook(' =======  Your Webhook Link Here ======= ')
+                    webhook = DiscordWebhook(webhook_link)
                     embed = DiscordEmbed(title='Series Update: {}'.format(title),color=random.choice(colors))
                     embed.set_timestamp()
                     webhook.add_embed(embed)
@@ -65,7 +66,7 @@ while True:
                         }
                         details_list[i].update({'episode': episode,'link': anime_detail['link']})
                         
-                        webhook = DiscordWebhook(' =======  Your Webhook Link Here ======= ')
+                        webhook = DiscordWebhook(webhook_link)
                         embed = DiscordEmbed(title='{} - Episode {}'.format(anime_detail['title'],anime_detail['episode']),url=anime_detail['link'],color=random.choice(colors))
                         embed.set_timestamp()
                         webhook.add_embed(embed)
