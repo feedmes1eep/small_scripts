@@ -1,55 +1,190 @@
-def left_button(app_name,version,path,path2,desc):
-    file_name=app_name+" Left.ini"
-    image_name=app_name+" Left.png"
-    side="Left"
-    file=open(file_name,'w')
-    file.write('[Rainmeter]\nUpdate=1000\nBackgroundMode=2\nSolidColor=0,0,0,1\n\n')
-    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion={}\nLicense=GNU General Public License v2.0\n'.format(version))
-    if desc != True:
-            file.write('Information=The left side button for {}. {}\n\n'.format(app_name,desc))
-    elif desc == True:
-        file.write('Information=The left side button for {}\n\n'.format(app_name))
-    file.write('[Variables]\nOffset=-150\nU=[!UpdateMeasureGroup Sliders][!UpdateMeterGroup Items][!Redraw]\n\n')
-    file.write('[{}]\nMeter=Image\nGroup=Items\nImageName=#@#Buttons\Transparent\{}\n;ImageTint is if you want to change the color of the button. RGB color codes only. example: 255,255,255\nImageTint=\nH=50\nX=#Offset#\nDynamicVariables=1\nMouseOverAction=[!CommandMeasure MeasureSlider "Stop 1"][!CommandMeasure MeasureSlider "Execute 2"]\nMouseLeaveAction=[!CommandMeasure MeasureSlider "Stop 2"][!CommandMeasure MeasureSlider "Execute 1"]\nLeftMouseDownAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "150"][!Update]\nLeftMouseUpAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "255"][!Update]["{}"]\n'.format(app_name,image_name,path))
-    if path2 == True:
-        file.write('RightMouseDownAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "150"][!Update]\nRightMouseUpAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "255"][!Update][{}]\n\n'.format(path2))
-    else:
-        file.write('RightMouseDownAction=[!Update]\n\n')
-    file.write('[MeasureSlider]\nMeasure=Plugin\nPlugin=ActionTimer\nGroup=Sliders\nActionList1=Repeat Left,5,30\nLeft=[!SetVariable Offset "(Clamp(#Offset#-5,-150,0))"]#U#\nActionList2=Repeat Right,5,30\nRight=[!SetVariable Offset "(Clamp(#Offset#+5,-150,0))"]#U#\nDynamicVariables=1\n')
-    file.close()
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+import re
+import requests
+import os
+import itertools
+import sys
 
-def right_button(app_name,version,path,path2,desc):
-    file_name=app_name+" Right.ini"
-    image_name=app_name+" Right.png"
-    side="Right"
-    file=open(file_name,'w')
-    file.write('[Rainmeter]\nUpdate=1000\nDynamicWindowSize=1\nAccurateText=1\nSkinWidth=180\nSkinHeight=50\nBackgroundMode=2\nSolidColor=0,0,0,1\n\n')
-    file.write('[Metadata]\nName=unFold\nAuthor=feedmes1eep\nVersion={}\nLicense=GNU General Public License v2.0\n'.format(version))
-    if desc != True:
-        file.write("Information=The right side button for {}. {}\n\n".format(app_name,desc))
-    elif desc == True:
-        file.write('Information=The right side button for {}\n\n'.format(app_name))
-    file.write('[Variables]\nOffset=130\nState=1\nU=[!UpdateMeasure MeasureSlider][!UpdateMeter *][!Redraw]\n\n')
-    file.write('[{}]\nMeter=Image\nGroup=Items\nImageName=#@#Buttons\Transparent\{}\n;ImageTint is if you want to change the color of the button. RGB color codes only. example: 255,255,255\nImageTint=\nW=200\nH=50\nX=#OffSet#\nDynamicVariables=1\nMouseOverAction=[!CommandMeasure MeasureSlider "Execute #State#"]\nMouseLeaveAction=[!CommandMeasure MeasureSlider "Execute #State#"]\nLeftMouseDownAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "130"][!Update]\nLeftMouseUpAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "255"][!Update]["{}"]\n'.format(app_name,image_name,path))
-    if path2 == True:
-        file.write('RightMouseDownAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "130"][!Update]\nRightMouseUpAction=[!SetOption "#CURRENTSECTION#" "ImageAlpha" "255"][!Update][{}]\n\n'.format(path2))
-    else:
-        file.write('RightMouseDownAction=[!Update]\n\n')
-    file.write('[MeasureSlider]\nMeasure=Plugin\nPlugin=ActionTimer\nActionList1=Repeat SlideLeft, 5, 30\nSlideLeft=[!SetVariable State "2"][!SetVariable OffSet "(Clamp(#OffSet#-5,0,130))"]#U#\nActionList2=Repeat SlideRight, 5, 30\nSlideRight=[!SetVariable State "1"][!SetVariable OffSet "(Clamp(#OffSet#+5,0,130))"]#U#\nDynamicVariables=1\n\n')
-    file.close()
 
-app_name=input('Application name: ')
-ver=float(input('Version: '))
-cdesc=input("Custom Description (CDesc) or Default Description (DDesc)?")
-if cdesc == "CDesc":
-    cdesc=input("Your Description for the button: ")
-elif cdesc == "DDesc":
-    cdesc = True
-path=input('Path to executable or link: ')
-path2=0
-nd2=input('Will there be a second path (for right click) (Type yes or no): ')
-if nd2 == 'yes' or nd2 == 'Yes' or nd2 == 'YES' or nd2 == 'YeS' or nd2 == 'YEs':
-    path2=input('A second path: ')
+class FileContent:
+    
+    def __init__(self, app_name, author, version, template_files, sides):
 
-left_button(app_name,ver,path,path2,cdesc)
-right_button(app_name,ver,path,path2,cdesc)
+        self.name = app_name
+        self.ver = version
+        self.author = author
+        self.file_list = template_files
+        self.sides = sides
+
+    def config_additions(self):
+
+        for file in self.file_list:
+            for line in file:
+                if line.startswith("Version"):
+                    i = file.index(line)
+                    file.pop(i)
+                    string = f"Version:{self.ver}"
+                    file.insert(i, string)
+                elif line.startswith("Author"):
+                    i = file.index(line)
+                    file.pop(i)
+                    string = f"Author:{self.author}"
+                    file.insert(i, string)
+                elif line.startswith("Information"):
+                    i = file.index(line)
+                    string = file.pop(i)
+                    string = string.replace("NAMEHERE", self.name)
+                    file.insert(i, string)
+                elif line.startswith("[NAMEHERE]"):
+                    i = file.index(line)
+                    string = file.pop(i)
+                    string = string.replace("NAMEHERE", self.name.upper())
+                    file.insert(i, string)
+                elif line.startswith("ImageName"):
+                    i = file.index(line)
+                    string = file.pop(i)
+                    string = string.replace("NAMEHERE", self.name)
+                    file.insert(i, string)
+                elif line.startswith("LeftMouseUpAction"):
+                    i = file.index(line)
+                    string = file.pop(i)
+                    string = string.replace("PATHHERE", f"{self.name.upper()} PATHHERE")
+                    file.insert(i, string)
+
+    def file_creation(self):
+
+        for side, file in itertools.product(self.sides, self.file_list):
+            config = f"{self.name} {side}.ini"
+
+            with open(config, "w") as f:
+                f.writelines(file)
+            
+
+class CompleteFiles:
+
+    def __init__(self, sides):
+        self.sides = sides
+
+    def complete_script(self):
+        files = []
+        for side in self.sides:
+            for file in os.listdir():
+                if os.path.splitext():
+                    pass
+
+
+class Version:
+    page = requests.get("https://github.com/Ruben35/More-Icons-unFold-Rainmeter/tags").text
+    page = BeautifulSoup(page, 'html.parser')
+    release_number = 0
+
+    @classmethod
+    def latest(cls):
+
+        hrefs = cls.page.findAll('a')
+
+        for link in hrefs:
+            if re.search("/releases/tag/", link['href']):
+                cls.release_number = float(link.text.strip())
+                break
+
+        return cls.release_number + 1
+
+    @classmethod
+    def download_page(cls):
+        
+        hrefs = cls.page.findAll("a")
+        link = 0
+
+        for link in hrefs:
+            if re.search("/releases/tag/", link["href"]):
+                link = link["href"]
+                break
+
+        link_page = requests.get(link).text
+        link_page = BeautifulSoup(link_page, "html.parser")
+
+        hrefs = link_page.findAll('a')
+
+        for link in hrefs:
+            if re.search("/releases/download", link["href"]):
+                link = link["href"]
+                break
+
+        return link
+
+
+def file_read(sides):
+
+    f_name = "Button Template.ini"
+    template_files = []
+    for side in sides:
+        if not os.path.isfile(f"{side} Button Template.ini"):
+            template_file = requests.get(f"https://raw.githubusercontent.com/feedmes1eep/small_scripts/master/"
+                                         f"unFold_config_file%2Ba_bash_script/{side}%20Button%20Template.ini").content
+            with open(f"{side} {f_name}", "wb") as f:
+                f.write(template_file)
+
+        with open(f"{side} {f_name}", "r") as f:
+            template_files.append(f.readlines())
+
+    return template_files
+
+
+def dotenv_file(env):
+    with open(".env", "a") as f:
+        f.write(f"{env[0]} = {env[1]}")
+
+
+def downloadSkin(page_link):
+
+    with open("unFold.rmskin", "wb") as f:
+        r = requests.get(page_link, stream=True)
+        file_length = int(r.headers.get('content-length'))
+        dl = 0
+        left = 100 / round(file_length / 101024)
+        for data in r.iter_content(chunk_size=101024):
+            dl += len(data)
+            print("{0:.1f} out of 100 Done".format(left), end=" ")
+            left = 100 / round(file_length / len(data))
+            f.write(data)
+            done = int(50*dl/file_length)
+            sys.stdout.write("{}{}\n".format("="*done, " "*(50-done)))
+            sys.stdout.flush()
+
+
+if __name__ == "__main__":
+
+    load_dotenv()
+    repo_dir = os.getenv("repo_dir")
+    rain_dir = f"C:/Users/{os.getlogin()}/Documents/Rainmeter/Skins/unFold"
+    if not os.path.isdir(rain_dir):
+        rain_dir = None
+
+    if not repo_dir:
+        repo_dir = input("Copy the 'More-Icons-unFold-Rainmeter' directory path here: ")
+        tple = ("repo_dir", repo_dir)
+        dotenv_file(tple)
+
+    if rain_dir is None and os.uname().sysname == "Linux":
+        pass
+    elif not os.path.isdir(rain_dir):
+        print("You don't have the skin installed.")
+        yn = input("I can download the file for you if you want. (Y/N): ")
+        if yn == "Y" or yn == "y":
+            downloadSkin(Version.download_page())
+        else:
+            yn = input("Proceed without skin installed? (Y/N):  ")
+            if yn == "N" or yn == "n":
+                print("Restart script after installing it then.")
+                sys.exit(1)        
+
+    application_name = input("Enter the Program's name: ")
+    author_name = input("Author's name (GitHub name.): ")
+
+    sides_list = ["Left", "Right"]
+    t_files = file_read(sides_list)
+    files = FileContent(application_name, author_name, Version.latest(), t_files, sides_list)
+    files.config_additions()
+    files.file_creation()

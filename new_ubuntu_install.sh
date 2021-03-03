@@ -8,24 +8,20 @@ sudo apt-get update
 # add domain to the front of these, i don't want people using my own net bandwidth.
 wget 
 /ubuntu-files/discord-0.0.13.deb 
-/ubuntu-files/vscode-installer.deb
-/ubuntu-files/CyberRe_1.0.0.tar.gz
-/ubuntu-files/Sweet-cursors.tar.xz
-/ubuntu-files/Flat-Remix-GTK-Blue-Darkest-NoBorder.tar.
-/ubuntu-files/Flatery-Dark.tar.gz
-sudo apt-get install filezilla git make gcc libglib2.0-dev-bin libgtk-3-dev libpolkit-dobject-1-dev protonvpn gnome-tweaks gnome-tweak-tool spotify-client vim ./discord-0.0.13.deb ./vscode-installer.deb -y
+/ubuntu-files/CyberRe_1.0.0.tar.gz 
+/ubuntu-files/Sweet-cursors.tar.xz 
+/ubuntu-files/Flat-Remix-GTK-Blue-Darkest-NoBorder.tar.xz 
+/ubuntu-files/vscode_installer.deb 
+/ubuntu-files/Flatery-Dark.tar.gz 
+/ubuntu-files/libappindicator1_12.10.1+20.04.20200408.1-0ubuntu1_amd64.deb 
+sudo apt-get install filezilla git make gcc libglib2.0-dev-bin libgtk-3-dev libpolkit-dobject-1-dev protonvpn gnome-tweaks gnome-tweak-tool spotify-client vim thonny ./discord-0.0.13.deb ./vscode_installer.deb ./libappindicator1_12.10.1+20.04.20200408.1-0ubuntu1_amd64 -y
 for f in *.tar*; do
 	tar xf "$f" &
 done
 wait
-mkdir ~/.themes
-mv -t ~/.themes Flat-Remix-GTK-Blue-Darkest-NoBorder
-sudo mv -t /usr/share/icons/ Sweet-cursors
-sudo mv -t /usr/share/icons/ Flatery-Dark
-cd 'CyberRe 1.0.0'
-./install.sh
-git clone https://github.com/thiggy01/gdm-background.git
-cd gdm-background
-make
-sudo make install
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/
+mkdir ~/git && cd ~/git
+git clone https://github.com/kp300/BACKGROUND-LOGIN-SCREEN.git
+curl -O https://raw.githubusercontent.com/bb010g/betterdiscordctl/master/betterdiscordctl
+chmod +x betterdiscordctl
+sudo mv betterdiscordctl /usr/local/bin
+ssh-keygen -t rsa -b 4096
