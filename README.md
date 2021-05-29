@@ -1,3 +1,4 @@
 # small_python_scripts
-python scripts
-i'll implement file creation into these scripts for ease of use for other people later for now they are private use. Made the repo public so that i don't have to login everytime when i need these scripts
+Made the repo public so that i don't have to login everytime when i need these scripts, which i realized that i can just use my ftp server for this or self host a git service.
+
+Some scripts will be removed at a future date.

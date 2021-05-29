@@ -1,4 +1,9 @@
-import csv,feedparser,re,time as t,datetime as dt,random
+import csv
+import feedparser
+import re
+import time as t
+import datetime as dt
+import random
 from discord_webhook import DiscordWebhook,DiscordEmbed
 
 details_list = []
