@@ -5,3 +5,11 @@ wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/theme
 unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
 chmod u+rw ~/.poshthemes/*.json
 rm ~/.poshthemes/themes.zip
+
+echo "Password."
+read supass
+echo $supass | sudo -S pacman -S neofetch
+
+mv ~/.bashrc ~/.bashrc.bac
+wget -q https://gitlab.com/feedmesleep/dots/-/raw/main/.bashrc
+mv .bashrc ~/.bashrc
